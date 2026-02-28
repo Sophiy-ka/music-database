@@ -16,7 +16,7 @@ where Name not like '% %';
 
 select Song_title
 from Tracks
-where Song_title like '%мой%' or Song_title like '%my%';
+where string_to_array(lower(Song_title), ' ') && array ['my', 'мой'];
 
 select g.Genre_name as genre, count(pg.Performers_ID) as performers_count
 from Genres g
@@ -24,12 +24,10 @@ left join Performers_Genres pg on g.Genres_ID = pg.Genres_ID
 group by g.Genres_ID, g.Genre_name
 order by performers_count desc;
 
-select a.Albums_title, Release_year, count(t.Tracks_ID) as tracks_count
+select count(t.Tracks_ID) as tracks_count
 from Albums a
-left join Tracks t on a.Albums_ID = t.Albums_ID 
-where Release_year between 2019 and 2020
-group by a.Albums_ID 
-order by tracks_count desc;
+join Tracks t on a.Albums_ID = t.Albums_ID 
+where Release_year between 2019 and 2020;
 
 
 select a.Albums_title, AVG(Duration) as avg_duration
